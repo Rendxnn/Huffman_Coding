@@ -90,6 +90,42 @@ def bfs(root):
     return ans
 
 
+def calculateLength(frequencies):
+    n = len(frequencies)
+    i = 0
+    array = [0] * (n * 2)
+    for char in frequencies:
+        array[n + i] = frequencies[char]
+        array[i] = n + i
+        i += 1
+    h = n
+    array = siftMinHeap(array)
+    newArr = []
+    for x in range(len(array) // 2):
+        newArr.append(array[array[x]])
+    # print(newArr)
+
+
+def siftMinHeap(array):
+    n = len(array)
+    while True:
+        # print(array)
+        mod = 0
+        for i in range(n // 2):
+            if i * 2 + 1 < n // 2:
+                if array[array[i]] > array[array[i * 2 + 1]]:
+                    array[array[i]], array[array[i * 2 + 1]] = array[array[i * 2 + 1]], array[array[i]]
+                    mod += 1
+                    break
+            if i * 2 + 2 < n // 2:
+                if array[array[i]] > array[array[i * 2 + 2]]:
+                    array[array[i]], array[array[i * 2 + 2]] = array[array[i * 2 + 2]], array[array[i]]
+                    mod += 1
+                    break
+        if mod == 0:
+            return array
+
+
 def main():
     message = input()
     frequencies = readFrequency(message)
@@ -97,11 +133,12 @@ def main():
     root = buildTree(nodes)
     values = assignCodes(root)
     newMessage = writeCode(message, values)
-    print(f'values: {values}')
+    # print(f'values: {values}')
     print(f'old message: {"".join(bin(ord(c)) for c in message).replace("b","")}')
     print(f'new message: {newMessage}')
-    print(f'message decoded is: {decode(newMessage, root)}')
-    print(bfs(root))
+    # print(f'message decoded is: {decode(newMessage, root)}')
+    # print(bfs(root))
+    calculateLength(frequencies)
 
 
 main()
